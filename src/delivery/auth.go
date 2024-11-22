@@ -5,8 +5,6 @@ import (
 	"synapsis-ecommerce/src/helper"
 	"synapsis-ecommerce/src/helper/validator"
 
-	"time"
-
 	"github.com/labstack/echo/v4"
 )
 
@@ -54,30 +52,11 @@ func (d *delivery) Login(c echo.Context) error {
 		return helper.WriteResponse(c, http.StatusNotFound, err.Error(), nil)
 	}
 
-	cookie := &http.Cookie{
-		Name:     "jwt",
-		Value:    token,
-		Expires:  time.Now().Add(time.Hour * 24),
-		Path:     "/user",
-		HttpOnly: true,
-	}
-
-	c.SetCookie(cookie)
-
-	return helper.WriteResponse(c, http.StatusOK, "Succesfully Login", nil)
+	return helper.WriteResponse(c, http.StatusOK, "Succesfully Login", token)
 
 }
 
 func (d *delivery) Logout(c echo.Context) error {
-	cookie := &http.Cookie{
-		Name:     "jwt",
-		Value:    "",
-		Expires:  time.Now().Add(-time.Hour),
-		Path:     "/user",
-		HttpOnly: true,
-	}
-
-	c.SetCookie(cookie)
 
 	return helper.WriteResponse(c, http.StatusOK, "you are logout", nil)
 

@@ -3,6 +3,7 @@ package delivery
 import (
 	"synapsis-ecommerce/src/service"
 
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 )
 
@@ -10,7 +11,7 @@ type Delivery interface {
 	RegisterHandler(c echo.Context) error
 	Login(c echo.Context) error
 	Logout(c echo.Context) error
-	Auth(e *echo.Group)
+	Routes(e *echo.Echo, configJWT echojwt.Config)
 }
 
 type delivery struct {

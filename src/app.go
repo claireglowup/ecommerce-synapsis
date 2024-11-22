@@ -2,6 +2,7 @@ package src
 
 import (
 	"log"
+	"os"
 	"synapsis-ecommerce/config/db"
 	"synapsis-ecommerce/config/util"
 	"synapsis-ecommerce/src/delivery"
@@ -10,6 +11,8 @@ import (
 	"synapsis-ecommerce/src/service"
 
 	validatorEngine "github.com/go-playground/validator"
+	"github.com/golang-jwt/jwt/v5"
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -49,8 +52,14 @@ func (s *server) Run() {
 	repo := repository.New(pg.DB)
 	service := service.NewService(repo)
 	delivery := delivery.NewDelivery(service)
-	delivery.Auth(s.httpServer.Group("auth"))
-	// delivery.User(s.httpServer.Group("user"))
+
+	configJWT := echojwt.Config{
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(jwt.RegisteredClaims)
+		},
+		SigningKey: []byte(os.Getenv("SECRET_KEY")),
+	}
+	delivery.Routes(s.httpServer, configJWT)
 
 	if err := s.httpServer.Start(s.config.HTTPServerAddress); err != nil {
 		log.Fatal(err.Error())

@@ -7,21 +7,23 @@ package repository
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 const login = `-- name: Login :one
-SELECT id, name, email, password FROM users WHERE email = $1
+SELECT id, password FROM users WHERE email = $1
 `
 
-func (q *Queries) Login(ctx context.Context, email string) (User, error) {
+type LoginRow struct {
+	ID       uuid.UUID `json:"id"`
+	Password string    `json:"password"`
+}
+
+func (q *Queries) Login(ctx context.Context, email string) (LoginRow, error) {
 	row := q.db.QueryRowContext(ctx, login, email)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Email,
-		&i.Password,
-	)
+	var i LoginRow
+	err := row.Scan(&i.ID, &i.Password)
 	return i, err
 }
 

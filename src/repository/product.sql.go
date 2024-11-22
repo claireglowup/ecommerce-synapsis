@@ -7,23 +7,37 @@ package repository
 
 import (
 	"context"
-
-	"github.com/google/uuid"
 )
 
-const getProductById = `-- name: GetProductById :one
-SELECT id, name, price, stock, description FROM products WHERE id = $1
+const getProducts = `-- name: GetProducts :many
+SELECT id, name, price, stock, description FROM products
 `
 
-func (q *Queries) GetProductById(ctx context.Context, id uuid.UUID) (Product, error) {
-	row := q.db.QueryRowContext(ctx, getProductById, id)
-	var i Product
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Price,
-		&i.Stock,
-		&i.Description,
-	)
-	return i, err
+func (q *Queries) GetProducts(ctx context.Context) ([]Product, error) {
+	rows, err := q.db.QueryContext(ctx, getProducts)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Product{}
+	for rows.Next() {
+		var i Product
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Price,
+			&i.Stock,
+			&i.Description,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

@@ -6,13 +6,11 @@ package repository
 
 import (
 	"context"
-
-	"github.com/google/uuid"
 )
 
 type Querier interface {
-	GetProductById(ctx context.Context, id uuid.UUID) (Product, error)
-	Login(ctx context.Context, email string) (User, error)
+	GetProducts(ctx context.Context) ([]Product, error)
+	Login(ctx context.Context, email string) (LoginRow, error)
 	RegisterUser(ctx context.Context, arg RegisterUserParams) error
 }
 

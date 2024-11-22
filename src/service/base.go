@@ -13,6 +13,7 @@ type Service interface {
 	getJWTClaims(cookie string) (*jwt.RegisteredClaims, error)
 	Register(ctx context.Context, user validator.UserRegister) error
 	Login(ctx context.Context, user validator.UserLogin) (string, error)
+	GetProducts(ctx context.Context) ([]repository.Product, error)
 }
 
 type service struct {
