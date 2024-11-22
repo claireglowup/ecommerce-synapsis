@@ -1,6 +1,6 @@
 create migrate:
-	migrate create -ext sql -dir config/migrations -seq table_name
+	migrate create -ext sql -dir config/migrations -seq init_table
 
  migrateup: 
-	migrate -database YOUR_DATABASE_URL -path PATH_TO_YOUR_MIGRATIONS up
+	migrate -database {DATABASE_URL} -path config/migrations up
 	
