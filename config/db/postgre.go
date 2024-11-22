@@ -1,4 +1,4 @@
-package config
+package db
 
 import (
 	"database/sql"
@@ -10,20 +10,20 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-type Postgre struct {
-	DB *sql.DB
+type Database struct {
+	DB       *sql.DB
 	dbDriver string
 	dbSource string
 }
 
-func Database(dbDriver, dbSource string) *Postgre {
-	return &Postgre{
+func NewSQL(dbDriver, dbSource string) *Database {
+	return &Database{
 		dbDriver: dbDriver,
 		dbSource: dbSource,
 	}
 }
 
-func (p *Postgre) InitPostgre() {
+func (p *Database) InitPostgre() {
 
 	pg, err := sql.Open(p.dbDriver, p.dbSource)
 	if err != nil {
@@ -43,9 +43,7 @@ func (p *Postgre) InitPostgre() {
 	p.DB = pg
 }
 
-
-
-func (p *Postgre) RunDBMigration(migrationSource string) {
+func (p *Database) RunDBMigration(migrationSource string) {
 	migration, err := migrate.New(migrationSource, p.dbSource)
 	if err != nil {
 		log.Fatalf("cannot create new migration instance: %v", err)

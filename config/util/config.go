@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	DBDriver          string
-	DatabaseURL          string
+	DatabaseURL       string
 	MigrationURL      string
 	HTTPServerAddress string
 }
@@ -21,8 +21,8 @@ func LoadConfig(path string) (*Config, error) {
 	}
 
 	return &Config{
-		DBDriver:          os.Getenv("DB_DRIVER"),
-		DatabaseURL:          os.Getenv("DATABASE_URL"),
+		DBDriver:          os.Getenv("DATABASE_DRIVER"),
+		DatabaseURL:       os.Getenv("DATABASE_URL"),
 		HTTPServerAddress: os.Getenv("HTTP_SERVER_ADDRESS"),
 		MigrationURL:      os.Getenv("MIGRATION_URL"),
 	}, nil

@@ -2,8 +2,9 @@ package main
 
 import (
 	"log"
-	config "synapsis-ecommerce/config/postgre"
 	"synapsis-ecommerce/config/util"
+	"synapsis-ecommerce/src"
+	"sync"
 )
 
 func main() {
@@ -13,23 +14,15 @@ func main() {
 		log.Fatal("cannot load env", err)
 	}
 
-	pg := config.Database(env.DBDriver,env.DatabaseURL)
-	pg.InitPostgre()
-	pg.RunDBMigration(env.MigrationURL)
-	defer pg.DB.Close()
+	server := src.InitServer(env)
 
+	wg := sync.WaitGroup{}
 
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		server.Run()
+	}()
 
-	// server := src.InitServer(pg, env)
-
-	// wg := sync.WaitGroup{}
-
-	// wg.Add(1)
-	// go func() {
-
-	// 	defer wg.Done()
-	// 	server.Start()
-	// }()
-
-	// wg.Wait()
+	wg.Wait()
 }
