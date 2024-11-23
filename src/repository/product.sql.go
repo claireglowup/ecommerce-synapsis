@@ -9,8 +9,42 @@ import (
 	"context"
 )
 
+const getProductByCategory = `-- name: GetProductByCategory :many
+SELECT id, name, price, stock, category, description FROM products WHERE category = $1
+`
+
+func (q *Queries) GetProductByCategory(ctx context.Context, category string) ([]Product, error) {
+	rows, err := q.db.QueryContext(ctx, getProductByCategory, category)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Product{}
+	for rows.Next() {
+		var i Product
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Price,
+			&i.Stock,
+			&i.Category,
+			&i.Description,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getProducts = `-- name: GetProducts :many
-SELECT id, name, price, stock, description FROM products
+SELECT id, name, price, stock, category, description FROM products
 `
 
 func (q *Queries) GetProducts(ctx context.Context) ([]Product, error) {
@@ -27,6 +61,7 @@ func (q *Queries) GetProducts(ctx context.Context) ([]Product, error) {
 			&i.Name,
 			&i.Price,
 			&i.Stock,
+			&i.Category,
 			&i.Description,
 		); err != nil {
 			return nil, err

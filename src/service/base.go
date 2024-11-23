@@ -14,6 +14,8 @@ type Service interface {
 	Register(ctx context.Context, user validator.UserRegister) error
 	Login(ctx context.Context, user validator.UserLogin) (string, error)
 	GetProducts(ctx context.Context) ([]repository.Product, error)
+	GetProductByCategory(ctx context.Context, category string) ([]repository.Product, error)
+	GetCartByUserId(ctx context.Context, authHeader string) ([]repository.GetCartByUserIdRow, error)
 }
 
 type service struct {

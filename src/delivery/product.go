@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (d *delivery) GetProducts(c echo.Context) error {
+func (d *delivery) getProducts(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	products, err := d.service.GetProducts(ctx)
@@ -16,5 +16,19 @@ func (d *delivery) GetProducts(c echo.Context) error {
 
 	}
 
-	return helper.WriteResponse(c, http.StatusOK, "success", products)
+	return helper.WriteResponse(c, http.StatusOK, "Success", products)
+}
+
+func (d *delivery) getProductsByCategory(c echo.Context) error {
+
+	category := c.Param("category")
+	ctx := c.Request().Context()
+
+	products, err := d.service.GetProductByCategory(ctx, category)
+	if err != nil {
+		return helper.WriteResponse(c, http.StatusNotFound, err.Error(), nil)
+	}
+
+	return helper.WriteResponse(c, http.StatusOK, "Success", products)
+
 }

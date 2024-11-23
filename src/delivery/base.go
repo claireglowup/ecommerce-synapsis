@@ -8,9 +8,6 @@ import (
 )
 
 type Delivery interface {
-	RegisterHandler(c echo.Context) error
-	Login(c echo.Context) error
-	Logout(c echo.Context) error
 	Routes(e *echo.Echo, configJWT echojwt.Config)
 }
 

@@ -7,9 +7,55 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
+
+const getCartByUserId = `-- name: GetCartByUserId :many
+SELECT p.name, p.price, p.category, p.description, ci.quantity 
+FROM carts 
+JOIN cart_items as ci on carts.id = ci.cart_id
+JOIN products as p on ci.product_id = p.id
+WHERE carts.user_id = $1
+`
+
+type GetCartByUserIdRow struct {
+	Name        string         `json:"name"`
+	Price       string         `json:"price"`
+	Category    string         `json:"category"`
+	Description sql.NullString `json:"description"`
+	Quantity    int32          `json:"quantity"`
+}
+
+func (q *Queries) GetCartByUserId(ctx context.Context, userID uuid.NullUUID) ([]GetCartByUserIdRow, error) {
+	rows, err := q.db.QueryContext(ctx, getCartByUserId, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetCartByUserIdRow{}
+	for rows.Next() {
+		var i GetCartByUserIdRow
+		if err := rows.Scan(
+			&i.Name,
+			&i.Price,
+			&i.Category,
+			&i.Description,
+			&i.Quantity,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
 
 const login = `-- name: Login :one
 SELECT id, password FROM users WHERE email = $1

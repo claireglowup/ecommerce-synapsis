@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS products (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),         
     name VARCHAR(255) NOT NULL,    
     price DECIMAL(10, 2) NOT NULL,
-    stock INT NOT NULL,            
+    stock INT NOT NULL,
+    category VARCHAR(40) NOT NULL,            
     description TEXT                
 );
 

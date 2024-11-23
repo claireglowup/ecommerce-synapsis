@@ -10,19 +10,6 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-type Database struct {
-	DB       *sql.DB
-	dbDriver string
-	dbSource string
-}
-
-func NewSQL(dbDriver, dbSource string) *Database {
-	return &Database{
-		dbDriver: dbDriver,
-		dbSource: dbSource,
-	}
-}
-
 func (p *Database) InitPostgre() {
 
 	pg, err := sql.Open(p.dbDriver, p.dbSource)

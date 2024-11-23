@@ -29,6 +29,7 @@ type Product struct {
 	Name        string         `json:"name"`
 	Price       string         `json:"price"`
 	Stock       int32          `json:"stock"`
+	Category    string         `json:"category"`
 	Description sql.NullString `json:"description"`
 }
 

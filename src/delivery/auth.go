@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (d *delivery) RegisterHandler(c echo.Context) error {
+func (d *delivery) registerHandler(c echo.Context) error {
 
 	var user validator.UserRegister
 
@@ -32,7 +32,7 @@ func (d *delivery) RegisterHandler(c echo.Context) error {
 
 }
 
-func (d *delivery) Login(c echo.Context) error {
+func (d *delivery) login(c echo.Context) error {
 
 	var user validator.UserLogin
 
@@ -52,12 +52,6 @@ func (d *delivery) Login(c echo.Context) error {
 		return helper.WriteResponse(c, http.StatusNotFound, err.Error(), nil)
 	}
 
-	return helper.WriteResponse(c, http.StatusOK, "Succesfully Login", token)
-
-}
-
-func (d *delivery) Logout(c echo.Context) error {
-
-	return helper.WriteResponse(c, http.StatusOK, "you are logout", nil)
+	return helper.WriteResponse(c, http.StatusOK, "Successfully logged in. Token will expire after 24 hours", token)
 
 }

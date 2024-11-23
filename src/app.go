@@ -59,6 +59,7 @@ func (s *server) Run() {
 		},
 		SigningKey: []byte(os.Getenv("SECRET_KEY")),
 	}
+
 	delivery.Routes(s.httpServer, configJWT)
 
 	if err := s.httpServer.Start(s.config.HTTPServerAddress); err != nil {
