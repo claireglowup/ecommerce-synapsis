@@ -49,7 +49,7 @@ func (s *server) Run() {
 	pg.RunDBMigration(s.config.MigrationURL)
 	defer pg.DB.Close()
 
-	repo := repository.New(pg.DB)
+	repo := repository.NewStore(pg.DB)
 	service := service.NewService(repo)
 	delivery := delivery.NewDelivery(service)
 

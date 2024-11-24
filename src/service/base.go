@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"os"
+	"strings"
 	"synapsis-ecommerce/src/helper/validator"
 	"synapsis-ecommerce/src/repository"
 
@@ -16,29 +17,32 @@ type Service interface {
 	GetProducts(ctx context.Context) ([]repository.Product, error)
 	GetProductByCategory(ctx context.Context, category string) ([]repository.Product, error)
 	GetCartByUserId(ctx context.Context, authHeader string) ([]repository.GetCartByUserIdRow, error)
+	AddProductToCartTx(ctx context.Context, authHeader string, arg validator.AddProductCartUser) error
 }
 
 type service struct {
-	repo repository.Querier
+	repo repository.Store
 }
 
-func NewService(repo repository.Querier) Service {
+func NewService(repo repository.Store) Service {
 	return &service{
 		repo: repo,
 	}
 }
 
-func (u *service) getJWTClaims(cookie string) (*jwt.RegisteredClaims, error) {
+func (s *service) getJWTClaims(authHeader string) (*jwt.RegisteredClaims, error) {
 
-	token, err := jwt.ParseWithClaims(cookie, &jwt.RegisteredClaims{}, func(t *jwt.Token) (interface{}, error) {
+	parts := strings.Split(authHeader, " ")
+
+	tokenString := parts[1]
+
+	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(t *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("SECRET_KEY")), nil
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	claims := token.Claims.(*jwt.RegisteredClaims)
-
-	return claims, nil
+	return token.Claims.(*jwt.RegisteredClaims), nil
 
 }

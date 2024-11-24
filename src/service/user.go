@@ -2,24 +2,15 @@ package service
 
 import (
 	"context"
-	"os"
-	"strings"
+	"synapsis-ecommerce/src/helper/validator"
 	"synapsis-ecommerce/src/repository"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
 func (s *service) GetCartByUserId(ctx context.Context, authHeader string) ([]repository.GetCartByUserIdRow, error) {
 
-	parts := strings.Split(authHeader, " ")
-
-	tokenString := parts[1]
-
-	claims := &jwt.RegisteredClaims{}
-	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("SECRET_KEY")), nil
-	})
+	claims, err := s.getJWTClaims(authHeader)
 	if err != nil {
 		return nil, err
 	}
@@ -35,5 +26,43 @@ func (s *service) GetCartByUserId(ctx context.Context, authHeader string) ([]rep
 	}
 
 	return cartUser, nil
+
+}
+
+func (s *service) AddProductToCartTx(ctx context.Context, authHeader string, arg validator.AddProductCartUser) error {
+
+	claims, err := s.getJWTClaims(authHeader)
+	if err != nil {
+		return err
+	}
+
+	uuidUser, err := uuid.Parse(claims.Issuer)
+	if err != nil {
+		return err
+	}
+
+	uuidProduct, err := uuid.Parse(arg.ProductId)
+	if err != nil {
+		return err
+	}
+
+	argRepo := repository.AddProductToCartParams{
+		UserID: uuid.NullUUID{
+			UUID:  uuidUser,
+			Valid: true,
+		},
+		ProductID: uuid.NullUUID{
+			UUID:  uuidProduct,
+			Valid: true,
+		},
+		Quantity: int32(arg.Quantity),
+	}
+
+	err = s.repo.AddProductToCartTx(ctx, argRepo)
+	if err != nil {
+		return err
+	}
+
+	return nil
 
 }

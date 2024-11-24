@@ -29,3 +29,8 @@ type UserLogin struct {
 	Email    string `json:"email" validate:"email,min=6"`
 	Password string `json:"password" validate:"required"`
 }
+
+type AddProductCartUser struct {
+	ProductId string `json:"product_id" validate:"required"`
+	Quantity  int    `json:"quantity" validate:"required,numeric"`
+}

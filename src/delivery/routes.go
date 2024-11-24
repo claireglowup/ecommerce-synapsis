@@ -14,6 +14,7 @@ func (d *delivery) Auth(e *echo.Group) {
 func (d *delivery) User(e *echo.Group, configJWT echojwt.Config) {
 	e.Use(echojwt.WithConfig(configJWT))
 	e.GET("/cart", d.getCartByUserId)
+	e.POST("/cart", d.AddProductToCartUser)
 
 }
 

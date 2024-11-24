@@ -11,11 +11,14 @@ import (
 )
 
 type Querier interface {
+	AddIdUserToCart(ctx context.Context, userID uuid.NullUUID) (uuid.UUID, error)
+	AddProductToCartItems(ctx context.Context, arg AddProductToCartItemsParams) error
 	GetCartByUserId(ctx context.Context, userID uuid.NullUUID) ([]GetCartByUserIdRow, error)
 	GetProductByCategory(ctx context.Context, category string) ([]Product, error)
 	GetProducts(ctx context.Context) ([]Product, error)
 	Login(ctx context.Context, email string) (LoginRow, error)
 	RegisterUser(ctx context.Context, arg RegisterUserParams) error
+	UpdateStockProduct(ctx context.Context, stock int32) error
 }
 
 var _ Querier = (*Queries)(nil)
