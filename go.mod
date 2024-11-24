@@ -11,6 +11,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo-jwt/v4 v4.2.0
 	github.com/labstack/echo/v4 v4.12.0
+	github.com/midtrans/midtrans-go v1.3.8
 	golang.org/x/crypto v0.27.0
 )
 

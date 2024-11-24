@@ -8,6 +8,7 @@ import (
 	"synapsis-ecommerce/src/repository"
 
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/midtrans/midtrans-go/snap"
 )
 
 type Service interface {
@@ -19,6 +20,7 @@ type Service interface {
 	GetCartByUserId(ctx context.Context, authHeader string) ([]repository.GetCartByUserIdRow, error)
 	AddProductToCartTx(ctx context.Context, authHeader string, arg validator.AddProductCartUser) error
 	DeleteProductOnCartById(ctx context.Context, authHeader string, cartItemId validator.DeleteProductOnCart) (string, error)
+	MidtransPayment(ctx context.Context, authHeader string) (*snap.Response, error)
 }
 
 type service struct {

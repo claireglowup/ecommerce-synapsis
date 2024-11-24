@@ -18,6 +18,7 @@ type Querier interface {
 	GetCartIdByUserId(ctx context.Context, userID uuid.NullUUID) (uuid.UUID, error)
 	GetProductByCategory(ctx context.Context, category string) ([]Product, error)
 	GetProducts(ctx context.Context) ([]Product, error)
+	GetUserByID(ctx context.Context, id uuid.UUID) (GetUserByIDRow, error)
 	Login(ctx context.Context, email string) (LoginRow, error)
 	RegisterUser(ctx context.Context, arg RegisterUserParams) error
 	UpdateStockProduct(ctx context.Context, stock int32) error
