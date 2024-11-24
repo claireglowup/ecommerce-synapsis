@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	"fmt"
 	"net/http"
 	"synapsis-ecommerce/src/helper"
 	"synapsis-ecommerce/src/helper/validator"
@@ -45,20 +46,21 @@ func (d *delivery) AddProductToCartUser(c echo.Context) error {
 }
 
 func (d *delivery) DeleteProductOnCartById(c echo.Context) error {
+
 	authHeader := c.Request().Header.Get("Authorization")
 
 	ctx := c.Request().Context()
-	arg := &validator.DeleteProductOnCart{}
+	var arg validator.DeleteProductOnCart
 
-	if err := c.Bind(arg); err != nil {
+	if err := c.Bind(&arg); err != nil {
 		return helper.WriteResponse(c, http.StatusBadRequest, err.Error(), nil)
 	}
 
-	err := d.service.DeleteProductOnCartById(ctx, authHeader, *arg)
+	idCartitemDeleted, err := d.service.DeleteProductOnCartById(ctx, authHeader, arg)
 	if err != nil {
 		return helper.WriteResponse(c, http.StatusInternalServerError, err.Error(), nil)
 
 	}
 
-	return helper.WriteResponse(c, http.StatusOK, "Success delete product on cart", nil)
+	return helper.WriteResponse(c, http.StatusOK, fmt.Sprintf("Success delete product on cart id : %s", idCartitemDeleted), nil)
 }

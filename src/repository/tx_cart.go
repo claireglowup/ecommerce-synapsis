@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
@@ -23,7 +24,15 @@ func (s *SQLStore) AddProductToCartTx(ctx context.Context, arg AddProductToCartP
 
 		var err error
 
-		idCart, err := q.AddIdUserToCart(ctx, arg.UserID)
+		idCart, err := q.GetCartIdByUserId(ctx, arg.UserID)
+		if err == sql.ErrNoRows {
+
+			idCart, err = q.AddIdUserToCart(ctx, arg.UserID)
+			if err != nil {
+				return err
+			}
+		}
+
 		if err != nil {
 			return err
 		}
@@ -48,8 +57,8 @@ func (s *SQLStore) AddProductToCartTx(ctx context.Context, arg AddProductToCartP
 
 }
 
-func (s *SQLStore) DeleteProductOnCartUserTx(ctx context.Context, arg DeleteProductOnCartUserParams) error {
-
+func (s *SQLStore) DeleteProductOnCartUserTx(ctx context.Context, arg DeleteProductOnCartUserParams) (string, error) {
+	var rows uuid.UUID
 	err := s.ExecTx(ctx, func(q *Queries) error {
 
 		var err error
@@ -59,19 +68,26 @@ func (s *SQLStore) DeleteProductOnCartUserTx(ctx context.Context, arg DeleteProd
 			return err
 		}
 
-		err = q.DeleteProductOnCartById(ctx, DeleteProductOnCartByIdParams{
+		rows, err = q.DeleteProductOnCartById(ctx, DeleteProductOnCartByIdParams{
 			ID:     arg.CartItemId,
 			CartID: uuid.NullUUID{UUID: idCart, Valid: true},
 		})
+
+		if err == sql.ErrNoRows {
+			return err
+		}
+
 		if err != nil {
 			return err
 		}
+
 		return err
 	})
+
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return rows.String(), nil
 
 }

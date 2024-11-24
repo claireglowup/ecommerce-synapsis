@@ -18,7 +18,7 @@ type Service interface {
 	GetProductByCategory(ctx context.Context, category string) ([]repository.Product, error)
 	GetCartByUserId(ctx context.Context, authHeader string) ([]repository.GetCartByUserIdRow, error)
 	AddProductToCartTx(ctx context.Context, authHeader string, arg validator.AddProductCartUser) error
-	DeleteProductOnCartById(ctx context.Context, authHeader string, cartItemId validator.DeleteProductOnCart) error
+	DeleteProductOnCartById(ctx context.Context, authHeader string, cartItemId validator.DeleteProductOnCart) (string, error)
 }
 
 type service struct {

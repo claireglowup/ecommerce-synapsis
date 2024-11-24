@@ -41,8 +41,9 @@ func (q *Queries) AddProductToCartItems(ctx context.Context, arg AddProductToCar
 	return err
 }
 
-const deleteProductOnCartById = `-- name: DeleteProductOnCartById :exec
+const deleteProductOnCartById = `-- name: DeleteProductOnCartById :one
 DELETE FROM cart_items WHERE id = $1 AND cart_id = $2
+RETURNING id
 `
 
 type DeleteProductOnCartByIdParams struct {
@@ -50,9 +51,11 @@ type DeleteProductOnCartByIdParams struct {
 	CartID uuid.NullUUID `json:"cart_id"`
 }
 
-func (q *Queries) DeleteProductOnCartById(ctx context.Context, arg DeleteProductOnCartByIdParams) error {
-	_, err := q.db.ExecContext(ctx, deleteProductOnCartById, arg.ID, arg.CartID)
-	return err
+func (q *Queries) DeleteProductOnCartById(ctx context.Context, arg DeleteProductOnCartByIdParams) (uuid.UUID, error) {
+	row := q.db.QueryRowContext(ctx, deleteProductOnCartById, arg.ID, arg.CartID)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
 }
 
 const getCartByUserId = `-- name: GetCartByUserId :many

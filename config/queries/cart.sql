@@ -14,8 +14,9 @@ RETURNING id;
 INSERT INTO cart_items (cart_id, product_id, quantity)
 VALUES ($1, $2, $3);
 
--- name: DeleteProductOnCartById :exec
-DELETE FROM cart_items WHERE id = $1 AND cart_id = $2;
+-- name: DeleteProductOnCartById :one
+DELETE FROM cart_items WHERE id = $1 AND cart_id = $2
+RETURNING id;
 
 -- name: GetCartIdByUserId :one
 SELECT id 

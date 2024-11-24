@@ -9,7 +9,7 @@ import (
 type Store interface {
 	Querier
 	AddProductToCartTx(ctx context.Context, arg AddProductToCartParams) error
-	DeleteProductOnCartUserTx(ctx context.Context, arg DeleteProductOnCartUserParams) error
+	DeleteProductOnCartUserTx(ctx context.Context, arg DeleteProductOnCartUserParams) (string, error)
 }
 
 type SQLStore struct {
