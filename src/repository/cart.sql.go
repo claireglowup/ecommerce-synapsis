@@ -41,8 +41,22 @@ func (q *Queries) AddProductToCartItems(ctx context.Context, arg AddProductToCar
 	return err
 }
 
+const deleteProductOnCartById = `-- name: DeleteProductOnCartById :exec
+DELETE FROM cart_items WHERE id = $1 AND cart_id = $2
+`
+
+type DeleteProductOnCartByIdParams struct {
+	ID     uuid.UUID     `json:"id"`
+	CartID uuid.NullUUID `json:"cart_id"`
+}
+
+func (q *Queries) DeleteProductOnCartById(ctx context.Context, arg DeleteProductOnCartByIdParams) error {
+	_, err := q.db.ExecContext(ctx, deleteProductOnCartById, arg.ID, arg.CartID)
+	return err
+}
+
 const getCartByUserId = `-- name: GetCartByUserId :many
-SELECT p.name, p.price, p.category, p.description, ci.quantity 
+SELECT ci.id, p.name, p.price, p.category, p.description, ci.quantity
 FROM carts 
 JOIN cart_items as ci on carts.id = ci.cart_id
 JOIN products as p on ci.product_id = p.id
@@ -50,6 +64,7 @@ WHERE carts.user_id = $1
 `
 
 type GetCartByUserIdRow struct {
+	ID          uuid.UUID      `json:"id"`
 	Name        string         `json:"name"`
 	Price       string         `json:"price"`
 	Category    string         `json:"category"`
@@ -67,6 +82,7 @@ func (q *Queries) GetCartByUserId(ctx context.Context, userID uuid.NullUUID) ([]
 	for rows.Next() {
 		var i GetCartByUserIdRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.Name,
 			&i.Price,
 			&i.Category,
@@ -84,4 +100,17 @@ func (q *Queries) GetCartByUserId(ctx context.Context, userID uuid.NullUUID) ([]
 		return nil, err
 	}
 	return items, nil
+}
+
+const getCartIdByUserId = `-- name: GetCartIdByUserId :one
+SELECT id 
+FROM carts
+WHERE user_id = $1
+`
+
+func (q *Queries) GetCartIdByUserId(ctx context.Context, userID uuid.NullUUID) (uuid.UUID, error) {
+	row := q.db.QueryRowContext(ctx, getCartIdByUserId, userID)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
 }

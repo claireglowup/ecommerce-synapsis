@@ -66,3 +66,31 @@ func (s *service) AddProductToCartTx(ctx context.Context, authHeader string, arg
 	return nil
 
 }
+
+func (s *service) DeleteProductOnCartById(ctx context.Context, authHeader string, arg validator.DeleteProductOnCart) error {
+
+	claims, err := s.getJWTClaims(authHeader)
+	if err != nil {
+		return err
+	}
+
+	uuidUser, err := uuid.Parse(claims.Issuer)
+	if err != nil {
+		return err
+	}
+	uuidCartItem, err := uuid.Parse(arg.CartItemId)
+	if err != nil {
+		return err
+	}
+
+	err = s.repo.DeleteProductOnCartUserTx(ctx, repository.DeleteProductOnCartUserParams{
+		UserID:     uuid.NullUUID{UUID: uuidUser, Valid: true},
+		CartItemId: uuidCartItem,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}

@@ -12,6 +12,11 @@ type AddProductToCartParams struct {
 	Quantity  int32
 }
 
+type DeleteProductOnCartUserParams struct {
+	UserID     uuid.NullUUID
+	CartItemId uuid.UUID
+}
+
 func (s *SQLStore) AddProductToCartTx(ctx context.Context, arg AddProductToCartParams) error {
 
 	err := s.ExecTx(ctx, func(q *Queries) error {
@@ -35,6 +40,34 @@ func (s *SQLStore) AddProductToCartTx(ctx context.Context, arg AddProductToCartP
 		return err
 	})
 
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
+func (s *SQLStore) DeleteProductOnCartUserTx(ctx context.Context, arg DeleteProductOnCartUserParams) error {
+
+	err := s.ExecTx(ctx, func(q *Queries) error {
+
+		var err error
+
+		idCart, err := q.GetCartIdByUserId(ctx, arg.UserID)
+		if err != nil {
+			return err
+		}
+
+		err = q.DeleteProductOnCartById(ctx, DeleteProductOnCartByIdParams{
+			ID:     arg.CartItemId,
+			CartID: uuid.NullUUID{UUID: idCart, Valid: true},
+		})
+		if err != nil {
+			return err
+		}
+		return err
+	})
 	if err != nil {
 		return err
 	}

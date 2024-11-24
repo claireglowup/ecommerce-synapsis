@@ -34,3 +34,7 @@ type AddProductCartUser struct {
 	ProductId string `json:"product_id" validate:"required"`
 	Quantity  int    `json:"quantity" validate:"required,numeric"`
 }
+
+type DeleteProductOnCart struct {
+	CartItemId string `json:"cart_item_id" validate:"required"`
+}

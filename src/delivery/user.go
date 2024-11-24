@@ -28,13 +28,13 @@ func (d *delivery) AddProductToCartUser(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	var arg validator.AddProductCartUser
+	arg := &validator.AddProductCartUser{}
 
-	if err := c.Bind(&arg); err != nil {
+	if err := c.Bind(arg); err != nil {
 		return helper.WriteResponse(c, http.StatusBadRequest, err.Error(), nil)
 	}
 
-	err := d.service.AddProductToCartTx(ctx, authHeader, arg)
+	err := d.service.AddProductToCartTx(ctx, authHeader, *arg)
 	if err != nil {
 		return helper.WriteResponse(c, http.StatusInternalServerError, err.Error(), nil)
 
@@ -42,4 +42,23 @@ func (d *delivery) AddProductToCartUser(c echo.Context) error {
 
 	return helper.WriteResponse(c, 200, "Success add product to cart", nil)
 
+}
+
+func (d *delivery) DeleteProductOnCartById(c echo.Context) error {
+	authHeader := c.Request().Header.Get("Authorization")
+
+	ctx := c.Request().Context()
+	arg := &validator.DeleteProductOnCart{}
+
+	if err := c.Bind(arg); err != nil {
+		return helper.WriteResponse(c, http.StatusBadRequest, err.Error(), nil)
+	}
+
+	err := d.service.DeleteProductOnCartById(ctx, authHeader, *arg)
+	if err != nil {
+		return helper.WriteResponse(c, http.StatusInternalServerError, err.Error(), nil)
+
+	}
+
+	return helper.WriteResponse(c, http.StatusOK, "Success delete product on cart", nil)
 }
