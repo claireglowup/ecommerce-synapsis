@@ -41,6 +41,8 @@ func (s *service) MidtransPayment(ctx context.Context, authHeader string) (*snap
 			return nil, err
 		}
 
+		priceByQuantity := price * int(each.Quantity)
+
 		seed := midtrans.ItemDetails{
 			ID:       each.ID.String(),
 			Name:     each.Name,
@@ -51,7 +53,7 @@ func (s *service) MidtransPayment(ctx context.Context, authHeader string) (*snap
 
 		itemMidtrans = append(itemMidtrans, seed)
 
-		amount += price
+		amount += priceByQuantity
 	}
 
 	var m = snap.Client{}
@@ -72,7 +74,6 @@ func (s *service) MidtransPayment(ctx context.Context, authHeader string) (*snap
 		},
 	}
 
-	// Kirim transaksi ke Midtrans
 	snapResp, _ := m.CreateTransaction(req)
 	if err != nil {
 		return nil, err
