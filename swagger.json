@@ -1,0 +1,618 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "online store REST API",
+    "version": "1",
+    "description": "OpenAPI for online store",
+    "termsOfService": "github.com/rikyfahrian",
+    "contact": {
+      "name": "Mohamad Riki Fahrian",
+      "email": "rikyfhrian@gmail.com",
+      "url": "github.com/rikyfahrian"
+    },
+    "license": {
+      "name": "APACHE 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local development server"
+    }
+  ],
+  "externalDocs": {
+    "description": "Github rikyfahrian",
+    "url": "https://github.com/rikyfahrian/unjuk-keterampilan-RESTAPI"
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "authentication grouping"
+    },
+    {
+      "name": "user",
+      "description": "user path"
+    },
+    {
+      "name": "products",
+      "description": "products path"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login user",
+        "description": "Allows a registered user to log in. If you do not have an account, please register via the '/auth/register' endpoint first.",
+        "requestBody": {
+          "description": "User credentials for logging in and obtaining a JWT token.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["email", "password"],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "rikyfhrian@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "rahasia"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful. Returns a JWT token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful. Token will expire after 24 hours."
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiMTk1NDU3NS1lZDVjLTRkZjgtYTMwYy05NjhiOWIxZDI0NzYiLCJleHAiOjE3MzI3MjUzMzh9.jkSLPE4tL48l_Q3cSWZjnKAIAlg19kFiKOzUEV3EO6k"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Register new user",
+        "description": "Allows a user to register for an account. After registration, the user can log in using the '/auth/login' endpoint.",
+        "requestBody": {
+          "description": "User information required for account registration.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["name", "email", "password"],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "riky"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "rikyfhrian@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "rahasia"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully registered. You can now log in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User successfully registered. You can now log in."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. Invalid input or email already in use.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email already in use or invalid input."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Get all products (requires authentication)",
+        "description": "Retrieves a list of all available products. This endpoint requires the user to be logged in. If accessed without being authenticated, it will return an 'Unauthorized' error.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully retrieved products"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "ec0186cf-1843-4c80-807e-63871bb76bd7"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Nike SB Blazer"
+                          },
+                          "price": {
+                            "type": "string",
+                            "example": "1200000"
+                          },
+                          "stock": {
+                            "type": "integer",
+                            "example": 2
+                          },
+                          "category": {
+                            "type": "string",
+                            "example": "shoes"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "Nike shoes for Skateboarding"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - User is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized - You need to log in to access this resource."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{category}": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Get products by category (dynamic parameter)",
+        "description": "Retrieve all products under the specified category. This endpoint requires the user to be logged in. Accessing this endpoint without authentication will return an Unauthorized error.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "required": true,
+            "description": "The category of products to retrieve",
+            "schema": {
+              "type": "string",
+              "example": "shoes"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved products by category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully retrieved products"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "ec0186cf-1843-4c80-807e-63871bb76bd7"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Nike SB Blazer"
+                          },
+                          "price": {
+                            "type": "string",
+                            "example": "1200000"
+                          },
+                          "stock": {
+                            "type": "integer",
+                            "example": 2
+                          },
+                          "category": {
+                            "type": "string",
+                            "example": "shoes"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "Nike shoes for skateboarding"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - User must be authenticated to access this resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized - You need to log in to access this resource."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/cart": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get cart items for a logged-in user",
+        "description": "Displays all products in the cart of a logged-in user. If accessed without login, returns an unauthorized error.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved products in the cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "ec0186cf-1843-4c80-807e-63871bb76bd7"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Nike SB Blazer"
+                          },
+                          "price": {
+                            "type": "string",
+                            "example": "1200000"
+                          },
+                          "stock": {
+                            "type": "integer",
+                            "example": 2
+                          },
+                          "category": {
+                            "type": "string",
+                            "example": "shoes"
+                          },
+                          "description": {
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "example": "Nike shoes for Skateboarding"
+                              },
+                              "valid": {
+                                "type": "boolean",
+                                "example": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["user"],
+        "summary": "Add product to user cart",
+        "description": "Adds a product to the cart for the logged-in user. The product ID should match an existing product in the database.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Add a product to the cart using the product ID.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["product_id", "quantity"],
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "string",
+                    "example": "ec0186cf-1843-4c80-807e-63871bb76bd7"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added product to cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully added product to cart"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["user"],
+        "summary": "Remove product from user cart",
+        "description": "Deletes a product from the user's cart. The cart item ID should match the ID of the product in the cart.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Delete a product from the cart using the cart item ID.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["cart_item_id"],
+                "type": "object",
+                "properties": {
+                  "cart_item_id": {
+                    "type": "string",
+                    "example": "ec0186cf-1843-4c80-807e-63871bb76bd7"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully deleted product from cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully deleted product with cart item ID: ec0186cf-1843-4c80-807e-63871bb76bd7"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/payment": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Retrieve payment link and calculate total price of items in cart",
+        "description": "This endpoint generates a payment link and calculates the total price of the items in the user's cart. The user must be authenticated to access this resource.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved payment link and total price",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Payment link and total price retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "7a127304-fe1d-48f0-aaf6-9e2a89467f2b"
+                        },
+                        "redirect_url": {
+                          "type": "string",
+                          "example": "https://app.sandbox.midtrans.com/snap/v4/redirection/7a127304-fe1d-48f0-aaf6-9e2a89467f2b"
+                        },
+                        "total_price": {
+                          "type": "string",
+                          "example": "1500000"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - User must be authenticated to access this resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized - You need to log in to access this resource."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
