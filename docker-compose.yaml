@@ -5,6 +5,7 @@ services:
   golang:
     build:
       context: .
+    image: rikyfahrian1/synapsis-backendintern:latest
     ports:
       - "8080:8080"
     depends_on:
