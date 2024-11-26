@@ -511,7 +511,7 @@
                 "properties": {
                   "cart_item_id": {
                     "type": "string",
-                    "example": "ec0186cf-1843-4c80-807e-63871bb76bd7"
+                    "example": "c7a12045-9310-4ced-a9b7-983bc46b135e"
                   }
                 }
               }

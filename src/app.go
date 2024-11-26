@@ -34,6 +34,7 @@ func InitServer(config *util.Config) Server {
 	}
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(middleware.CORS())
 
 	return &server{
 		config:     *config,
