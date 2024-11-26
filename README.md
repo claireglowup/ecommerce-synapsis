@@ -33,12 +33,14 @@ Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.S
 
 ### **1. Jalankan dengan Docker Compose**
 
-1. Clone repository ini:
+1. Ubah .env.example menjadi .env
+
+2. Clone repository ini:
    ```bash
    git clone https://github.com/claireglowup/ecommerce-synapsis.git
    cd ecommerce-synapsis
    ```
-2. Bangun dan jalankan container:
+3. Bangun dan jalankan container:
    ```bash
    docker-compose up --build
    ```
@@ -60,7 +62,7 @@ docker pull rikyfahrian1/synapsis-backendintern
 docker run -p 8080:8080 rikyfahrian1/synapsis-backendintern
 ```
 
-### \*\*4. Tersedia Open Api Di swagger.json
+### **4. Tersedia Open Api Di swagger.json**
 
 ## **📜 Lisensi**
 
