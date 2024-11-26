@@ -67,24 +67,3 @@ docker run -p 8080:8080 rikyfahrian1/synapsis-backendintern
 Proyek ini menggunakan lisensi [MIT License](LICENSE).
 
 ---
-
-## **🤝 Kontribusi**
-
-1. Fork repository ini.
-2. Buat branch baru:
-   ```bash
-   git checkout -b fitur-baru
-   ```
-3. Commit perubahan:
-   ```bash
-   git commit -m "Menambahkan fitur baru"
-   ```
-4. Push ke branch:
-   ```bash
-   git push origin fitur-baru
-   ```
-5. Buat Pull Request.
-
----
-
-Semoga bermanfaat, dan selamat mencoba! 🚀
