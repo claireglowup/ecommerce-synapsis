@@ -2,9 +2,12 @@
 
 # **REST API Online Store**
 
-Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.Synapsis Indonesia**. REST API
+Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.Synapsis Indonesia**.
 
 ---
+
+**Flow**
+![flow](https://i.pinimg.com/736x/3a/dd/f9/3addf9dd47732fd3292a04f621561ca4.jpg)
 
 ## **✨ Fitur Utama**
 
