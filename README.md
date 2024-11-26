@@ -36,7 +36,7 @@ Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.S
 1. Clone repository ini:
    ```bash
    git clone https://github.com/claireglowup/ecommerce-synapsis.git
-   cd repo-name
+   cd ecommerce-synapsis
    ```
 2. Bangun dan jalankan container:
    ```bash
