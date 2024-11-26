@@ -13,9 +13,9 @@ type Config struct {
 	HTTPServerAddress string
 }
 
-func LoadConfig(path string) (*Config, error) {
+func LoadConfig() (*Config, error) {
 
-	err := godotenv.Load(path)
+	err := godotenv.Load()
 	if err != nil {
 		return nil, err
 	}

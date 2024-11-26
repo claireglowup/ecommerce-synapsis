@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	env, err := util.LoadConfig(".env")
+	env, err := util.LoadConfig()
 	if err != nil {
 		log.Fatal("cannot load env", err)
 	}

@@ -12,3 +12,6 @@ run:
 
 sqlc: 
 	sqlc generate
+
+start:
+	docker-compose up --build
