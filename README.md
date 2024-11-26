@@ -2,7 +2,7 @@
 
 # **REST API Online Store**
 
-Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.Synapsis Indonesia**. REST API ini memungkinkan pelanggan untuk melakukan berbagai interaksi pada toko online, seperti melihat produk, mengelola keranjang belanja, dan melakukan pembayaran.
+Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.Synapsis Indonesia**. REST API
 
 ---
 
@@ -21,9 +21,11 @@ Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.S
 
 - **Golang**
 - **Echo Go Framework**
+- **SQLC**
 - **PostgreSQL**
 - **Docker**
 - **Docker Compose**
+- **Midtrans Sandbox**
 
 ---
 
@@ -33,7 +35,7 @@ Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.S
 
 1. Clone repository ini:
    ```bash
-   git clone https://github.com/username/repo-name.git
+   git clone https://github.com/claireglowup/ecommerce-synapsis.git
    cd repo-name
    ```
 2. Bangun dan jalankan container:
@@ -58,21 +60,7 @@ docker pull rikyfahrian1/synapsis-backendintern
 docker run -p 8080:8080 rikyfahrian1/synapsis-backendintern
 ```
 
----
-
-## **🔍 Endpoint API**
-
-| HTTP Method | Endpoint              | Deskripsi                                   |
-| ----------- | --------------------- | ------------------------------------------- |
-| **GET**     | `/products?category=` | Melihat daftar produk berdasarkan kategori. |
-| **POST**    | `/cart`               | Menambahkan produk ke keranjang belanja.    |
-| **GET**     | `/cart`               | Melihat daftar produk di keranjang.         |
-| **DELETE**  | `/cart/:id`           | Menghapus produk dari keranjang.            |
-| **POST**    | `/checkout`           | Melakukan checkout dan pembayaran.          |
-| **POST**    | `/register`           | Mendaftarkan pelanggan baru.                |
-| **POST**    | `/login`              | Login pelanggan.                            |
-
----
+### \*\*4. Tersedia Open Api Di swagger.json
 
 ## **📜 Lisensi**
 
