@@ -46,7 +46,7 @@ Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.S
    git clone https://github.com/claireglowup/ecommerce-synapsis.git
    cd ecommerce-synapsis
    ```
-2. **Ubah .env.example menjadi .env**
+2. **Ubah file .env.example menjadi .env**
 
 3. Bangun dan jalankan container:
    ```bash
