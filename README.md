@@ -72,6 +72,8 @@ docker run -p 8080:8080 rikyfahrian1/synapsis-backendintern
 
 ### **4. Tersedia Open Api Di swagger.json**
 
+link Api Spec https://app.swaggerhub.com/apis/rikyfahrian/online-store_rest_api/1
+
 ## **📜 Lisensi**
 
 Proyek ini menggunakan lisensi [MIT License](LICENSE).
