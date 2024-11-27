@@ -7,7 +7,12 @@ Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.S
 ---
 
 **Flow**
+
 ![flow](https://i.pinimg.com/736x/c8/1d/4b/c81d4b034203100c3e9d13c8ca3d4d80.jpg)
+
+**ERD Schema**
+
+![erd](https://i.pinimg.com/736x/62/eb/8d/62eb8d7d5f7e3703012795d7f38b1855.jpg)
 
 ## **✨ Fitur Utama**
 
