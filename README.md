@@ -41,7 +41,7 @@ Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.S
 
 ### **1. Jalankan dengan Docker Compose**
 
-1. Ubah .env.example menjadi .env
+1. **Ubah .env.example menjadi .env**
 
 2. Clone repository ini:
    ```bash
