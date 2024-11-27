@@ -41,13 +41,13 @@ Repository ini adalah solusi untuk test challenge **Backend Engineer Intern PT.S
 
 ### **1. Jalankan dengan Docker Compose**
 
-1. **Ubah .env.example menjadi .env**
-
-2. Clone repository ini:
+1. Clone repository ini:
    ```bash
    git clone https://github.com/claireglowup/ecommerce-synapsis.git
    cd ecommerce-synapsis
    ```
+2. **Ubah .env.example menjadi .env**
+
 3. Bangun dan jalankan container:
    ```bash
    docker-compose up --build
